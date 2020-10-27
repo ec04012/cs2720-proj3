@@ -1,0 +1,41 @@
+This project is done by eman Saleh
+I print the wait queue every 5 customers.
+
+Wait Queue at Customer 5 arrival:
+Customers in the Wait Queue: [empty queue] they might print customer 5
+Priority (departure queue):
+
+Wait Queue at customer 10 arrival
+customer5, customer6, customer7, customer8, customer9
+
+Wait Queue at customer 15 arrival
+customer12, customer13, customer14
+//may be 11 as well.
+
+Wait Queue at customer 20 arrival
+customer16, customer17, customer18, customer19
+
+Departure queue:
+Customer4 0  wait  service 40 
+Customer1 0  wait  service 50  
+Customer2 0  wait  service 60 
+Customer7 45 wait  service 65 
+Customer3 0  wait  service 70 
+Customer5 30 wait  service 80  
+Customer6 40 wait  service 90  
+Customer8 45 wait  service 95
+Customer9 51 wait  service 135
+Customer10 40  wait  service 150
+Customer11 69  wait  service 170
+Customer12 70  wait  service 185
+Customer13 105 wait  service 200
+Customer14 70  wait  service 270
+Customer17 40  wait  service 300
+Customer19 130 wait  service 320
+Customer15 80  wait  service 350
+Customer18 110 wait  service 360  
+Customer16 65  wait  service 435  
+Customer20 320 wait  service 920
+Average waiting time = 56.7
+
+Number of tellers for required wait time is 5
