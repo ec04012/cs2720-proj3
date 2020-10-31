@@ -1,9 +1,5 @@
 #include "QueType.h"
 
-class EmptyQueue {};
-
-class FullQueue {};
-
 template <class ItemType>
 QueType<ItemType>::QueType() {
     // Class constructor.

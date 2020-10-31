@@ -1,5 +1,5 @@
 link: QueType PriorityQueue Customer BankSimulation.cpp
-	g++ -Wall -g -pedantic-errors -o p2 SortedList.o Student.o BankSimulation.cpp
+	g++ -Wall -g -pedantic-errors -o p3 QueType.o PriorityQueue.o Customer.o BankSimulation.cpp
 
 Customer: Customer.cpp Customer.h
 	g++ -c -Wall -g -pedantic-errors Customer.cpp
