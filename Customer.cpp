@@ -43,3 +43,9 @@ void Customer::setService(int const& newService) {
 void Customer::setWait(int const& newWait) {
     this->arrival = newWait;
 }
+
+// Stream overload
+ostream& operator<<(ostream& out, const Customer& cus) {
+    out << cus.getName() << " " << cus.getWait() << " wait service " << cus.getService();
+    return out;
+}

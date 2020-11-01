@@ -26,6 +26,9 @@ class Customer {
     void setService(int const &);
     void setWait(int const &);
 
+    // Stream overload
+    friend ostream &operator<<(ostream &out, const Customer &stu);
+
    private:
     string name;
     int arrival;
