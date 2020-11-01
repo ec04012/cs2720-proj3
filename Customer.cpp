@@ -29,6 +29,9 @@ int Customer::getService() const {
 int Customer::getWait() const {
     return wait;
 }
+int Customer::getDeparture() const {
+    return arrival + wait + service;
+}
 
 // set methods
 void Customer::setName(string const& newName) {

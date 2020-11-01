@@ -19,6 +19,7 @@ class Customer {
     int getArrival() const;
     int getService() const;
     int getWait() const;
+    int getDeparture() const;
 
     // set methods
     void setName(string const &);
