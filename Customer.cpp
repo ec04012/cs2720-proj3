@@ -1,19 +1,19 @@
 #include "Customer.h"
 
 // Class constructors
-// Default constructor, uses placeholder name and id
+// Default constructor, uses placeholder name and times
 Customer::Customer() {
-    this->setName("John Smith");
-    this->setArrival(0);
-    this->setService(60);
-    this->setWait(0);
+    setName("John Smith");
+    setArrival(0);
+    setService(0);
+    setWait(0);
 }
 // Param constructor, gets name, arrival, service, and wait as params
-Customer::Customer(string const& name, int const& arrival, int const& service, int const& wait) {
-    this->setName(name);
-    this->setArrival(arrival);
-    this->setService(service);
-    this->setWait(wait);
+Customer::Customer(const string& name, const int& arrival, const int& service, const int& wait) {
+    setName(name);
+    setArrival(arrival);
+    setService(service);
+    setWait(wait);
 }
 
 // get methods
@@ -34,21 +34,21 @@ int Customer::getDeparture() const {
 }
 
 // set methods
-void Customer::setName(string const& newName) {
+void Customer::setName(const string& newName) {
     this->name = newName;
 }
-void Customer::setArrival(int const& newArrival) {
+void Customer::setArrival(const int& newArrival) {
     this->arrival = newArrival;
 }
-void Customer::setService(int const& newService) {
-    this->arrival = newService;
+void Customer::setService(const int& newService) {
+    this->service = newService;
 }
-void Customer::setWait(int const& newWait) {
-    this->arrival = newWait;
+void Customer::setWait(const int& newWait) {
+    this->wait = newWait;
 }
 
 // Stream overload
 ostream& operator<<(ostream& out, const Customer& cus) {
-    out << cus.getName() << " " << cus.getWait() << " wait service " << cus.getService();
+    out << cus.getName() << " " << cus.getWait() << " wait service " << cus.getDeparture();
     return out;
 }
