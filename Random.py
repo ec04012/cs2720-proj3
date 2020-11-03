@@ -1,9 +1,11 @@
 import random
 
+numTellers = 4
+numCustomers = 150
 customers = []
 
-# Generate 150 random customers
-for i in range(0, 150):	
+# Generate random customers
+for i in range(0, numCustomers):	
 	customer = {
 		"name" : "Customer" + str(i + 1),
 		"arrival" : random.randint(0,25200),
@@ -20,6 +22,8 @@ for i in range(0, len(customers)):
 
 # Write to file
 with open("randCustomers.txt", "w") as f:
+	f.write("numTellers " + str(numTellers) + "\n")
+	f.write("numCustomers " + str(len(customers)) + "\n\n")
 	for customer in customers:
 		f.write(customer["name"].ljust(13))
 		f.write("arrival " + str(customer["arrival"]).rjust(5) + "\t")
