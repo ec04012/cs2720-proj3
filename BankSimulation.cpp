@@ -91,7 +91,7 @@ void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure)
 }
 
 template <class ItemType>
-void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, ofstream& outFile) {
+void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, double& averageWait, ofstream& outFile) {
     // Set variables
     // int counter = 0;                // counter so we can print every 5 customers
     int* tellers = new int[numTellers]();  // array of teller availiability times. 0 because all the tellers are available at start
@@ -150,8 +150,9 @@ void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, ofstream& outF
 
     // Print final departure queue and average wait time
     printDeparture(departureQue);
+    averageWait = totalWait / numCustomers;
     cout << "Number of tellers = " << numTellers << endl;
-    cout << "Average wait time = " << totalWait / numCustomers << " seconds" << endl;
+    cout << "Average wait time = " << averageWait << " seconds" << endl;
     delete[] tellers;
 
     return;
@@ -188,6 +189,7 @@ int main() {
         arrivalQue.enqueue(cus);
     }
 
-    runSimulation(arrivalQue, numTellers, outFile);
+    double averageWait = 0;
+    runSimulation(arrivalQue, numTellers, averageWait, outFile);
     return 0;
 }
