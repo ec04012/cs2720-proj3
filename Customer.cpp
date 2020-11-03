@@ -51,10 +51,10 @@ void Customer::setWait(const int& newWait) {
 
 // Stream overload
 ostream& operator<<(ostream& out, const Customer& cus) {
-    out << cus.getName();
-    out << "\tArrival " << std::setw(6) << left << cus.getArrival();
-    out << "\tWait " << std::setw(6) << left << cus.getWait();
-    out << "\tService " << std::setw(6) << left << cus.getService();
-    out << "\tDeparture " << std::setw(6) << left << cus.getDeparture();
+    out << cus.getName() << "    ";
+    out << cus.getWait() << "  ";
+    out << "wait      ";
+    out << cus.getDeparture() << "  ";
+    out << "service";
     return out;
 }

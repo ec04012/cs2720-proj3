@@ -86,9 +86,11 @@ void printDeparture(PriorityQueue<ItemType>& departure) {
  *        unchanged
  */
 template <class ItemType>
-void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure) {
-    printWaiting(waiting);
-    printDeparture(departure);
+void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure, ofstream& outFile) {
+    outFile << "Waiting queue" << endl;
+    waiting.printQueue(outFile);
+    outFile << "Priority queue" << endl;
+    departure.printQueue(outFile);
 }
 
 template <class ItemType>
@@ -102,12 +104,8 @@ void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, double& averag
     PriorityQueue<Customer> departureQue;
     int numCustomers = arrivalQue.length();
 
-    // Print initial message
-    cout << "Initial tellers" << endl;
-    printArray(tellers, numTellers);
-    Customer cus;
-
     // Run the simulatin until all customers have been served
+    Customer cus;
     while(departureQue.length() < numCustomers) {
         if(!arrivalQue.isEmpty()) {
             // If the arrival queue is not empty, then determine whether to serve the arriving customer or the waiting customer
@@ -138,22 +136,20 @@ void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, double& averag
                 departureQue.enqueue(cus, cus.getDeparture());
             }
         }
-        if((departureQue.length() + waitingQue.length()) % 5 == 0 && departureQue.length() != numCustomers) {
-            cout << "Number of Customers " << departureQue.length() + waitingQue.length() << endl;
-            cout << "Earliest = " << tellers[timeIndex] << endl;
-            cout << "Tellers: ";
-            printArray(tellers, numTellers);
+        if((departureQue.length() + waitingQue.length()) % 5 == 0) {
+            outFile << "Number of Customers " << departureQue.length() + waitingQue.length() << endl;
             // print departure que and waiting que
-            printQueues<Customer>(waitingQue, departureQue);
-            cout << endl;
+            printQueues<Customer>(waitingQue, departureQue, outFile);
+            outFile << endl;
         }
     }  // while there are customers to serve
 
     // Print final departure queue and average wait time
-    printDeparture(departureQue);
+    outFile << "Final Priority/Departure Queue" << endl;
+    departureQue.printQueue(outFile);
     averageWait = totalWait / numCustomers;
-    cout << "Number of tellers = " << numTellers << endl;
-    cout << "Average wait time = " << averageWait << " seconds" << endl;
+    outFile << "Number of tellers = " << numTellers << endl;
+    outFile << "Average wait time = " << averageWait << " seconds" << endl;
     delete[] tellers;
 
     // Reset arrivalQueue
@@ -209,17 +205,17 @@ int main() {
     runSimulation(arrivalQue, numTellers, averageWait, outFile);
 
     while(averageWait > 300 && numTellers < numeric_limits<int>::max()) {
-        cout << "=============================================================================================================" << endl;
+        outFile << "============================================================" << endl;
         numTellers++;
         runSimulation(arrivalQue, numTellers, averageWait, outFile);
     }
 
     // Print required number of tellers
-    cout << "=============================================================================================================" << endl;
+    outFile << "============================================================" << endl;
     if(averageWait > 300.0) {
-        cout << "Impossible to get average wait under 5 minutes." << endl;
+        outFile << "Impossible to get average wait under 5 minutes." << endl;
     } else {
-        cout << "Number of tellers for required wait time is " << numTellers << endl;
+        outFile << "Number of tellers for required wait time is " << numTellers << endl;
     }
 
     return 0;
