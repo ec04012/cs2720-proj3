@@ -51,14 +51,8 @@ void printArray(int* arr, int len) {
     cout << endl;
 }
 
-/* Prints the departue and witing queues
- * Params: The departure and waiting queues
- * Pre: The queues have been initilizes
- * Post: The queues have been printed, and are
- *        unchanged
- */
 template <class ItemType>
-void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure) {
+void printWaiting(QueType<ItemType>& waiting) {
     cout << "Waiting queue" << endl;
     for(int i = 0; i < waiting.length(); i++) {
         Customer cus;
@@ -66,6 +60,10 @@ void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure)
         cout << cus << endl;
         waiting.enqueue(cus);
     }
+}
+
+template <class ItemType>
+void printDeparture(PriorityQueue<ItemType>& departure) {
     cout << "Departure queue" << endl;
     PriorityQueue<Customer> temp;
     Customer cus;
@@ -78,6 +76,18 @@ void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure)
         temp.dequeue(cus);
         departure.enqueue(cus, cus.getDeparture());
     }
+}
+
+/* Prints the departue and witing queues
+ * Params: The departure and waiting queues
+ * Pre: The queues have been initilizes
+ * Post: The queues have been printed, and are
+ *        unchanged
+ */
+template <class ItemType>
+void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure) {
+    printWaiting(waiting);
+    printDeparture(departure);
 }
 
 int main() {
@@ -137,7 +147,7 @@ int main() {
     // int counter = 0;                // counter so we can print every 5 customers
     int* tellers = new int[numTellers]();  // array of teller availiability times. 0 because all the tellers are available at start
     int timeIndex = 0;                     // Index of the earliest avaiable teller
-
+    double totalWait = 0;
     cout << "Initial tellers" << endl;
     printArray(tellers, numTellers);
     Customer cus;
@@ -149,6 +159,7 @@ int main() {
                 // Calcualate wait time for arriving customer, and enqueue to waiting or departue queue
                 arrivalQue.dequeue(cus);
                 setCustomerWait(cus, tellers[timeIndex]);
+                totalWait = totalWait + cus.getWait();
                 if(cus.getWait() == 0) {
                     // if a teller is available, instantly serve customer
                     updateTellers(tellers, numTellers, timeIndex, cus);
@@ -170,8 +181,8 @@ int main() {
                 departureQue.enqueue(cus, cus.getDeparture());
             }
         }
-        if((departureQue.length() + waitingQue.length()) % 1 == 0) {
-            cout << "Num of Customers " << departureQue.length() + waitingQue.length() << endl;
+        if((departureQue.length() + waitingQue.length()) % 1 == 0 && departureQue.length() != numCustomers) {
+            cout << "Number of Customers " << departureQue.length() + waitingQue.length() << endl;
             cout << "Earliest = " << tellers[timeIndex] << endl;
             cout << "Tellers: ";
             printArray(tellers, numTellers);
@@ -179,6 +190,14 @@ int main() {
             printQueues<Customer>(waitingQue, departureQue);
             cout << endl;
         }
-    }
+    }  // while there are customers to server
+
+    // Print final departure queue
+    printDeparture(departureQue);
+    cout << "Number of tellers = " << numTellers << endl;
+    cout << "Average wait time = " << totalWait / numCustomers << " seconds" << endl;
+    cout << endl;
+
+    // print
     return 0;
 }
