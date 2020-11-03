@@ -196,7 +196,6 @@ int main() {
     printDeparture(departureQue);
     cout << "Number of tellers = " << numTellers << endl;
     cout << "Average wait time = " << totalWait / numCustomers << " seconds" << endl;
-    cout << endl;
 
     // print
     return 0;
