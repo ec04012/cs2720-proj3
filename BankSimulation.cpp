@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <limits>
 
 #include "Customer.h"
 #include "req/PriorityQueue.cpp"
@@ -137,7 +138,7 @@ void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, double& averag
                 departureQue.enqueue(cus, cus.getDeparture());
             }
         }
-        if((departureQue.length() + waitingQue.length()) % 1 == 0 && departureQue.length() != numCustomers) {
+        if((departureQue.length() + waitingQue.length()) % 5 == 0 && departureQue.length() != numCustomers) {
             cout << "Number of Customers " << departureQue.length() + waitingQue.length() << endl;
             cout << "Earliest = " << tellers[timeIndex] << endl;
             cout << "Tellers: ";
@@ -179,7 +180,7 @@ int main() {
     // File io
     ifstream inFile;
     ofstream outFile;
-    inFile.open("input.txt");
+    inFile.open("randCustomers2.txt");
     outFile.open("output.txt");
     string temp;  // string used to read and store useless info from input
 
@@ -199,14 +200,27 @@ int main() {
         // Enqueue customer with name, arrivalTime, serviceTime.
         // Use default waitTime = 0
         // We will calculate the correctWaitTime during the simulation.
-        // cout << "Name: " << name << " arrival: " << arrivalTime << " service: " << serviceTime << endl;
         Customer cus(name, arrivalTime, serviceTime, 0);
-        // cout << cus << endl << endl;
-        // cout << cus.getName() << " " << cus.getWait() << " " << cus.getService() << endl;
         arrivalQue.enqueue(cus);
     }
 
+    // Run  first simulation
     double averageWait = 0;
     runSimulation(arrivalQue, numTellers, averageWait, outFile);
+
+    while(averageWait > 300 && numTellers < numeric_limits<int>::max()) {
+        cout << "=============================================================================================================" << endl;
+        numTellers++;
+        runSimulation(arrivalQue, numTellers, averageWait, outFile);
+    }
+
+    // Print required number of tellers
+    cout << "=============================================================================================================" << endl;
+    if(averageWait > 300.0) {
+        cout << "Impossible to get average wait under 5 minutes." << endl;
+    } else {
+        cout << "Number of tellers for required wait time is " << numTellers << endl;
+    }
+
     return 0;
 }
