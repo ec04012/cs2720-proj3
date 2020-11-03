@@ -40,45 +40,6 @@ void updateTellers(int* tellers, int len, int& index, Customer& cus) {
     }
 }
 
-/* Prints the specified array
- * Param: arr the specified array
- * Pre: arr has been initilized and has length > 0
- * Post: arr has been printed and is unchanged
- */
-void printArray(int* arr, int len) {
-    for(int i = 0; i < len; i++) {
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-}
-
-template <class ItemType>
-void printWaiting(QueType<ItemType>& waiting) {
-    cout << "Waiting queue" << endl;
-    for(int i = 0; i < waiting.length(); i++) {
-        Customer cus;
-        waiting.dequeue(cus);
-        cout << cus << endl;
-        waiting.enqueue(cus);
-    }
-}
-
-template <class ItemType>
-void printDeparture(PriorityQueue<ItemType>& departure) {
-    cout << "Departure queue" << endl;
-    PriorityQueue<Customer> temp;
-    Customer cus;
-    while(departure.length() > 0) {
-        departure.dequeue(cus);
-        cout << cus << endl;
-        temp.enqueue(cus, cus.getDeparture());
-    }
-    while(temp.length() > 0) {
-        temp.dequeue(cus);
-        departure.enqueue(cus, cus.getDeparture());
-    }
-}
-
 /* Prints the departue and witing queues
  * Params: The departure and waiting queues
  * Pre: The queues have been initilizes
@@ -93,6 +54,13 @@ void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure,
     departure.printQueue(outFile);
 }
 
+/*
+ * Runs a simulation with the specified parameters.
+ * Params: arrivalQue = the queue of customers, numTellers = number of tellers, averageWait = int to return averageWait, outFile = file to write to
+ * Pre: arrivalQue is an initlized queue of customers sorted by arrival queueue. numTellers is initialized and > 0
+ *      averageWait and outFile are initialzied.
+ * Post: Simulation has been ran, arrivalQue is reset to its original state.
+ */
 template <class ItemType>
 void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, double& averageWait, ofstream& outFile) {
     // Set variables
@@ -176,7 +144,7 @@ int main() {
     // File io
     ifstream inFile;
     ofstream outFile;
-    inFile.open("randCustomers2.txt");
+    inFile.open("input.txt");
     outFile.open("output.txt");
     string temp;  // string used to read and store useless info from input
 
