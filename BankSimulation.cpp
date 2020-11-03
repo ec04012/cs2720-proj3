@@ -90,67 +90,23 @@ void printQueues(QueType<ItemType>& waiting, PriorityQueue<ItemType>& departure)
     printDeparture(departure);
 }
 
-int main() {
-    // File io
-    ifstream inFile;
-    ofstream outFile;
-    inFile.open("input.txt");
-    // outFile.open("output.txt");
-    string temp;  // string used to read and store useless info from input
-
-    // Read data from file, and enqueue customers
-    QueType<Customer> arrivalQue;
-    QueType<Customer> waitingQue;
-    PriorityQueue<Customer> departureQue;
-    int numTellers;
-    int numCustomers;
-
-    inFile >> temp >> numTellers;
-    inFile >> temp >> numCustomers;
-
-    for(int i = 0; i < numCustomers; i++) {
-        string name;
-        int arrivalTime;
-        int serviceTime;
-        inFile >> name >> temp >> arrivalTime >> temp >> serviceTime;
-        // Enqueue customer with name, arrivalTime, serviceTime.
-        // Use default waitTime = 0
-        // We will calculate the correctWaitTime during the simulation.
-        // cout << "Name: " << name << " arrival: " << arrivalTime << " service: " << serviceTime << endl;
-        Customer cus(name, arrivalTime, serviceTime, 0);
-        // cout << cus << endl << endl;
-        // cout << cus.getName() << " " << cus.getWait() << " " << cus.getService() << endl;
-        arrivalQue.enqueue(cus);
-    }
-    /*
-    cout << "Peek" << arrivalQue.peek() << endl;
-    cout << "Arrival queue" << endl;
-    for(int i = 0; i < arrivalQue.length(); i++) {
-        Customer cus;
-        arrivalQue.dequeue(cus);
-        cout << cus.getName() << " " << cus.getWait() << " " << cus.getService() << endl;
-        arrivalQue.enqueue(cus);
-    }
-    cout << "Departure queue" << endl;
-    for(int i = 0; i < departureQue.length(); i++) {
-        Customer cus;
-        departureQue.dequeue(cus);
-        cout << cus.getName() << " " << cus.getWait() << " " << cus.getService() << endl;
-        departureQue.enqueue(cus);
-    }
-    cout << "====================" << endl;
-    // printQueues(arrivalQue, departureQue);
-    exit(0);
-    */
-
-    // Run the simulation
+template <class ItemType>
+void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, ofstream& outFile) {
+    // Set variables
     // int counter = 0;                // counter so we can print every 5 customers
     int* tellers = new int[numTellers]();  // array of teller availiability times. 0 because all the tellers are available at start
     int timeIndex = 0;                     // Index of the earliest avaiable teller
     double totalWait = 0;
+    QueType<Customer> waitingQue;
+    PriorityQueue<Customer> departureQue;
+    int numCustomers = arrivalQue.length();
+
+    // Print initial message
     cout << "Initial tellers" << endl;
     printArray(tellers, numTellers);
     Customer cus;
+
+    // Run the simulatin until all customers have been served
     while(departureQue.length() < numCustomers) {
         if(!arrivalQue.isEmpty()) {
             // If the arrival queue is not empty, then determine whether to serve the arriving customer or the waiting customer
@@ -190,13 +146,48 @@ int main() {
             printQueues<Customer>(waitingQue, departureQue);
             cout << endl;
         }
-    }  // while there are customers to server
+    }  // while there are customers to serve
 
-    // Print final departure queue
+    // Print final departure queue and average wait time
     printDeparture(departureQue);
     cout << "Number of tellers = " << numTellers << endl;
     cout << "Average wait time = " << totalWait / numCustomers << " seconds" << endl;
+    delete[] tellers;
 
-    // print
+    return;
+}
+
+int main() {
+    // File io
+    ifstream inFile;
+    ofstream outFile;
+    inFile.open("input.txt");
+    outFile.open("output.txt");
+    string temp;  // string used to read and store useless info from input
+
+    // Read data from file, and enqueue customers
+    QueType<Customer> arrivalQue;
+    int numTellers;
+    int numCustomers;
+
+    inFile >> temp >> numTellers;
+    inFile >> temp >> numCustomers;
+
+    for(int i = 0; i < numCustomers; i++) {
+        string name;
+        int arrivalTime;
+        int serviceTime;
+        inFile >> name >> temp >> arrivalTime >> temp >> serviceTime;
+        // Enqueue customer with name, arrivalTime, serviceTime.
+        // Use default waitTime = 0
+        // We will calculate the correctWaitTime during the simulation.
+        // cout << "Name: " << name << " arrival: " << arrivalTime << " service: " << serviceTime << endl;
+        Customer cus(name, arrivalTime, serviceTime, 0);
+        // cout << cus << endl << endl;
+        // cout << cus.getName() << " " << cus.getWait() << " " << cus.getService() << endl;
+        arrivalQue.enqueue(cus);
+    }
+
+    runSimulation(arrivalQue, numTellers, outFile);
     return 0;
 }
