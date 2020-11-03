@@ -155,6 +155,23 @@ void runSimulation(QueType<ItemType>& arrivalQue, int numTellers, double& averag
     cout << "Average wait time = " << averageWait << " seconds" << endl;
     delete[] tellers;
 
+    // Reset arrivalQueue
+    while(departureQue.length() > 0) {
+        // Set wait to 0 and move to arrival
+        departureQue.dequeue(cus);
+        cus.setWait(0);
+        arrivalQue.enqueue(cus);
+    }
+    while(arrivalQue.length() > 0) {
+        // move back to departure to sort by arrival
+        arrivalQue.dequeue(cus);
+        departureQue.enqueue(cus, cus.getArrival());
+    }
+    while(departureQue.length() > 0) {
+        // move back to arrival
+        departureQue.dequeue(cus);
+        arrivalQue.enqueue(cus);
+    }
     return;
 }
 
