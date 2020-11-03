@@ -167,7 +167,6 @@ int main() {
             // If the arrival que is empty, then we empty the waiting queue and serve all waiting customers
             while(!waitingQue.isEmpty()) {
                 waitingQue.dequeue(cus);
-                updateTellers(tellers, numTellers, timeIndex, cus);
                 departureQue.enqueue(cus, cus.getDeparture());
             }
         }
